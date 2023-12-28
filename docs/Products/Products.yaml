@@ -1,0 +1,150 @@
+paths:
+  /api/products:
+    get:
+      summary: Obtiene todos los productos
+      tags:
+        - Products
+      responses:
+        "200": 
+          description: Se obtuvieron lo productos exitosamente
+          content: 
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#components/schemas/Products'
+
+        "500":
+          description: Error en el servidor 
+    post: 
+      summary: Agrega un producto
+      tags:
+        - Products
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema:
+              $type: String
+              items:
+                $ref: '#components/requestBodies/updateProduct'
+      responses:
+        "200": 
+          description: se agrego el producto exitosamente
+        "500":
+          description: Error en el servidor 
+  /api/products/{id}:
+      get:
+        summary: Obtiene un solo producto a partir de su id
+        tags:
+          - Products
+        parameters:
+        - name: id
+          in: path
+          required: true
+          description: id del producto que solicita
+          schema:
+            type: String
+        responses:
+          "200":
+            description: Producto encontrado exitosamente
+            content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/Products'
+          "500":
+            description: Error en el servidor 
+      put:
+        summary: Actualiza un solo producto a partir de su id
+        tags:
+          - Products
+        parameters:
+        - name: id
+          in: path
+          required: true
+          description: id del producto que se va actualizar
+          schema:
+            $type: String
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $type: String
+                items:
+                  $ref: '#components/requestBodies/updateProduct'
+        responses:
+          "200":
+            description: Producto actualizado exitosamente 
+          "500":
+            description: Error en el servidor 
+      delete:
+        summary: Elimina un solo producto a partir de su id
+        tags:
+          - Products
+        parameters:
+        - name: id
+          in: path
+          required: true
+          description: id del producto que se va Eliminar
+          schema:
+            $type: object
+        responses:
+          "200":
+            description: Producto Eliminado exitosamente 
+            content:
+              application/json:
+                schema:
+                  $type: String
+                  items:
+                    $ref: '#components/schemas/Products'
+          "500":
+            description: Error en el servidor 
+
+components:
+  schemas:
+    Products:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: Id generado por MongoDB
+        title:
+          type: String
+          description: Nombre del producto
+        description:
+          type: String
+          description:  Caracteristicas del producto
+        price:
+          type: Numb
+          description: Precio del producto
+        stock:
+          type: Numb
+          description: Cantidad disponible del producto
+      example:
+        _id: ObjectId("652acf15d8ebe0b6e5d6dd86")
+        title: Computadora
+        description: Oficina, pack offices, intel i5
+        price: 500
+        stock: 5
+  requestBodies:
+    updateProduct:
+      type: object
+      properties:
+        title:
+          type: String
+          description: Nombre del producto
+        description:
+          type: String
+          description:  Caracteristicas del producto
+        price:
+          type: Numb
+          description: Precio del producto
+        stock:
+          type: Numb
+          description: Cantidad disponible del producto
+      example:
+        title: Computadora
+        description: Gamer, intel i9, placa de video
+        price: 1000
+        stock: 10

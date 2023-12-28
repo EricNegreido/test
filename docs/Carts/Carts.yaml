@@ -1,0 +1,185 @@
+paths:
+  /api/carts:
+    post: 
+      summary: Crea un carrito
+      tags:
+        - carts
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema:
+              $type: String
+              items:
+                $ref: '#components/schemas/carts'
+      responses:
+        "200": 
+          description: se creo el carrito exitosamente
+        "500":
+          description: Error en el servcidor 
+  /api/carts/{cid}:
+      get:
+        summary: Obtiene un solo carrito a partir de su cid
+        tags:
+          - carts
+        parameters:
+        - name: cid
+          in: path
+          required: true
+          description: cid del carrito que solicita
+          schema:
+            type: String
+        responses:
+          "200":
+            description: carrito encontrado exitosamente
+            content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/carts'
+          "500":
+            description: Error en el servcidor 
+      delete:
+        summary: Elimina un solo carrito a partir de su cid
+        tags:
+          - carts
+        parameters:
+        - name: cid
+          in: path
+          required: true
+          description: cid del carrito que se va Eliminar
+          schema:
+            $type: object
+        responses:
+          "200":
+            description: carrito Eliminado exitosamente 
+            content:
+              application/json:
+                schema:
+                  $type: String
+                  items:
+                    $ref: '#components/schemas/carts'
+          "500":
+            description: Error en el servcidor 
+  /api/carts/{cid}/products/{pid}:
+      post:
+        summary: Agrega un producto al carrito a partir de los cid y pid respectivos
+        tags:
+          - carts
+        parameters:
+        - name: cid
+          in: path
+          required: true
+          description: cid del carrito que solicita
+        - name: pid
+          in: path
+          required: true
+          description: pid del product que quiere agregar
+          schema:
+            type: String
+        requestBody:
+          required: true
+          content:
+          application/json:
+            schema:
+              $type: String
+              items:
+                $ref: '#components/requestBodies/updateCartProduct'
+        responses:
+          "200":
+            description: producto agregado al carrito exitosamente
+          "500":
+            description: Error en el servcidor  
+      put:
+        summary: Actualiza un producto del carrito a partir de los cid y pid respectivos
+        tags:
+          - carts
+        parameters:
+        - name: cid
+          in: path
+          required: true
+          description: cid del carrito que solicita
+          schema:
+            type: String
+        - name: pid
+          in: path
+          required: true
+          description: pid del product que se quiere actualizar
+          schema:
+            type: String
+        responses:
+          "200":
+            description: producto del carrito actualizado exitosamente
+            content:
+              application/json:
+                schema:
+                  $ref: '#components/requestBodies/updateCartProduct'
+          "500":
+            description: Error en el servcidor  
+      delete:
+        summary: Elimina un producto al carrito a partir de los cid y pid respectivos
+        tags:
+          - carts
+        parameters:
+        - name: cid
+          in: path
+          required: true
+          description: cid del carrito que solicita
+          schema:
+            type: Object
+        - name: pid
+          in: path
+          required: true
+          description: pid del product que se quiere eliminar
+          schema:
+            type: Object
+        responses:
+          "200":
+            description: producto del carrito actualizado exitosamente
+            content:
+              application/json:
+                schema:
+                  $ref: '#components/requestBodies/updateCartProduct'
+          "500":
+            description: Error en el servcidor  
+
+components:
+  schemas:
+    carts:
+      type: object
+      properties:
+        _id:
+          type: Objectcid
+          description: cid generado por MongoDB
+        products: 
+          type: Array
+          description: carrito con su respectiva lista de productos, se guarda la referencia de estos
+      example:
+        _cid: Objectcid("652acf15d8ebe0b6e5d6dd86")
+        products: 
+          [{
+          title: "Computadora",
+          description: "Gamer, intel i9, placa de video",
+          price: 1000,
+          stock: 10
+          }]
+  requestBodies:
+    updateCartProduct:
+      type: object
+      properties:
+        title:
+          type: String
+          description: Nombre del Producto
+        description:
+          type: String
+          description:  Caracteristicas del producto
+        price:
+          type: Numb
+          description: Precio del producto
+        stock:
+          type: Numb
+          description: Cantcidad disponible del producto
+      example:
+        title: Computadora
+        description: Gamer, intel i9, placa de vcideo
+        price: 1000
+        stock: 10
